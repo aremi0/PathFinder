@@ -1,9 +1,9 @@
 int nR = 25;
 int nC = 25;
 
-float dX, dY; //Larghezza e altezza della generica casella;
+float dX, dY; //Larghezza e altezza della generica casella
 
-float closedRate = 0.2;
+float closedRate = 0.2; //Probabilità caselle chiuse
 
 Grid grid;
 
@@ -19,16 +19,18 @@ void setup() {
 
   for (int i = 0; i < nR; i++) {  //Chiudo delle caselle della griglia con una prob del 20%
     for (int j = 0; j < nC; j++) {
-      if (random(1) < closedRate)
+      if (random(1) < closedRate) {
         grid.node[i][j].open = false;
+        grid.node[i][j].c = color(0);
+      }
     }
   }
 
   iTarget = floor(random(nR));
   jTarget = floor(random(nC));
-  grid.node[iTarget][jTarget].reset();
-
+  grid.node[iTarget][jTarget].reset(); //Se il Target è un nodo chiuso, lo apro e rendo Target...
   grid.setValues(iTarget, jTarget, 0);
+  grid.copy();
 }
 
 void draw() {
@@ -39,14 +41,26 @@ void draw() {
 void mousePressed() {
   int i = floor(mouseY/dY); //...
   int j = floor(mouseX/dX); //Ottengo colonna e riga della casella cliccata
-  
-  grid.resetColor();
-  
-  if(grid.node[i][j].open){
-    ArrayList<Node> sPath = grid.shortestPath(i, j);
-    for(int ii = 0; ii < sPath.size(); ii++){
-    Node n = sPath.get(ii);
-    n.c = color(ii*5, 255, ii);
+
+  if (mouseButton == CENTER)
+    grid.restore();
+
+  if (grid.node[i][j].open) {
+    if (mouseButton == LEFT) { //Cammino minimo...
+      grid.restore();
+      ArrayList<Node> sPath = grid.shortestPath(i, j);
+      for (int ii = 0; ii < sPath.size(); ii++) {
+        Node n = sPath.get(ii);
+        n.c = color(ii*5, 255, ii);
+      }
+    } else if (mouseButton == RIGHT) { //Cammino massimo...
+      ArrayList<Node> lPath = grid.longestPath(i, j);
+      for (int ii = 0; ii < lPath.size(); ii++) {
+        Node n = lPath.get(ii);
+        n.c = color(255-(ii%2), 255-ii, 0);
+      }
+      Node n = lPath.get(lPath.size()-1);
+      n.c = color(180, 50, 180);
     }
   }
 }

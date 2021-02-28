@@ -8,12 +8,13 @@ public class Node {
     this.i = i;
     this.j = j;
     open = true;
-    peso = nR*nC;
+    peso = nR*nC; //Peso di default
     c = color(255);
   }
-  
-  public void reset(){
+
+  public void reset() {
     open = true;
+    c = color(255);
     peso = nR*nC;
   }
 }
