@@ -2,5 +2,5 @@
 
 Simple path finder written in java, using processing
 
-![Screenshot](https://ibb.co/Lk4nS6R)
+![pathfinder01.png](https://i.postimg.cc/RZ8CJgPp/pathfinder01.png)
 
